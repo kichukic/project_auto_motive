@@ -1,0 +1,244 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <style>
+    body {
+      min-width: 410px;
+      max-width: 1800px;
+      height: 600px;
+      margin: 0 auto;
+    }
+    h2 {
+      font-family: Arial;
+      font-size: 2.5rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h2>Real-time Graphs</h2>
+  <div id="chart-temperature1" class="container"></div>
+</body>
+<script>
+var chartTemp1 = new Highcharts.Chart({
+  chart: { renderTo: 'chart-temperature1' },
+  title: { text: 'Automotive Plots', align : 'left' },
+  subtitle : { text: '5 sensors', align : 'left'},
+  series: [{
+    name: "Temperature1",
+    showInLegend: true,
+    data: [],
+	tooltip: {
+            valueSuffix: ' °C'
+    }
+  },
+  {
+    name: "Temperature2",
+    showInLegend: true,
+    data: [],
+	yAxis: 1,
+	tooltip: {
+            valueSuffix: ' °C'
+    }
+  },
+  {
+    name: "Temperature3",
+    showInLegend: true,
+    data: [],
+	yAxis: 2,
+	tooltip: {
+            valueSuffix: ' °C'
+    }
+  },
+  {
+    name: "Pressure",
+    showInLegend: true,
+    data: [],
+	yAxis: 3,
+	tooltip: {
+            valueSuffix: ' kPa'
+    }
+  },
+  {
+    name: "RPM",
+    showInLegend: true,
+    data: [],
+	yAxis: 4,
+	tooltip: {
+            valueSuffix: ' rpm'
+    }
+  }],
+  plotOptions: {
+    line: {
+      animation: false,
+      dataLabels: { enabled: true }
+    },
+    series: [{ color: '#059e8a' },{ color: '#049e8a' },{ color: '#039e8a' },{ color: '#029e8a' },{ color: '#019e8a' }]
+  },
+  xAxis: {
+    type: 'datetime',
+	title: { text: 'Time' },
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: [{
+    title: { text: 'Temperature 1' ,
+	style: {
+                color: Highcharts.getOptions().colors[0]
+           }
+	},
+    labels: {
+            format: '{value} °C',
+            style: {
+                color: Highcharts.getOptions().colors[0]
+            }
+    },
+    opposite: true},
+    {
+	gridLineWidth: 0,
+	title: { text: 'Temperature 2',
+      style: {
+                color: Highcharts.getOptions().colors[1]
+             }	  
+	},
+    labels: {
+            format: '{value} °C',
+            style: {
+                color: Highcharts.getOptions().colors[1]
+            }
+    },
+	opposite : true},
+    {
+	gridLineWidth: 0,
+	title: { text: 'Temperature 3',
+      style: {
+                color: Highcharts.getOptions().colors[2]
+             }
+    },
+    labels: {
+            format: '{value} °C',
+            style: {
+                color: Highcharts.getOptions().colors[2]
+            }
+    },
+    opposite: true},
+    {
+	title: { text: 'Pressure',
+      style: {
+                color: Highcharts.getOptions().colors[3]
+             }
+	},
+    labels: {
+            format: '{value} kPa',
+            style: {
+                color: Highcharts.getOptions().colors[3]
+            }
+    },
+    },
+    {
+	title: { text: 'RPM',
+      style: {
+                color: Highcharts.getOptions().colors[4]
+             }
+
+	},
+    labels: {
+            format: '{value} rpm',
+            style: {
+                color: Highcharts.getOptions().colors[4]
+            }
+    }
+    }
+	],
+	tooltip: {
+        shared: true
+    },
+  credits: { enabled: false },
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    floating: false,
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    x: 0,
+                    y: 0
+                },
+                yAxis: [{
+                    labels: {
+                        align: 'left',
+                        x: 0,
+                        y: -6
+                    },
+                    showLastLabel: false
+                }, {
+                    labels: {
+                        align: 'left',
+                        x: 0,
+                        y: -6
+                    },
+                    showLastLabel: false
+                },{
+                    labels: {
+                        align: 'left',
+                        x: 0,
+                        y: -6
+                    },
+                    showLastLabel: false
+                },{
+                    labels: {
+                        align: 'right',
+                        x: 0,
+                        y: -6
+                    },
+                    showLastLabel: false
+                },{
+                    labels: {
+                        align: 'right',
+                        x: 0,
+                        y: -6
+                    },
+                    showLastLabel: false
+                }, {
+                    visible: false
+                }]
+            }
+        }]
+    }
+});
+setInterval(function() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+          resp = this.responseText;
+          var y_arr = resp.split(" ");
+          var x = y_arr[9] ;
+      // console.log(this.responseText);
+      if (chartTemp1.series[0].data.length > 40) {
+        chartTemp1.series[0].addPoint([x, parseFloat(y_arr[0])], true, true, true);
+		chartTemp1.series[1].addPoint([x, parseFloat(y_arr[1])], true, true, true);
+		chartTemp1.series[2].addPoint([x, parseFloat(y_arr[2])], true, true, true);
+		chartTemp1.series[3].addPoint([x, parseFloat(y_arr[3])], true, true, true);
+		chartTemp1.series[4].addPoint([x, parseFloat(y_arr[4])], true, true, true);
+      } else {
+        chartTemp1.series[0].addPoint([x, parseFloat(y_arr[0])], true, false, true);
+		chartTemp1.series[1].addPoint([x, parseFloat(y_arr[1])], true, false, true);
+		chartTemp1.series[2].addPoint([x, parseFloat(y_arr[2])], true, false, true);
+		chartTemp1.series[3].addPoint([x, parseFloat(y_arr[3])], true, false, true);
+		chartTemp1.series[4].addPoint([x, parseFloat(y_arr[4])], true, false, true);
+      }
+    }
+  };
+  xhttp.open("GET", "/temp1", true);
+  xhttp.send();
+}, 30000);
+</script>
+</html>
+
+ 
