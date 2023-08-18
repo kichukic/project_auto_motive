@@ -30,7 +30,7 @@ router.get("/getData",async(req,res)=>{
       let temp3 = []
       let pressure = []
 
-        await sensordata.find().then((data)=>{
+        await sensordata.find().sort({_id: -1}).limit(20).then((data)=>{
           data.map((item)=>{
             rpm.push(item.rpm)
             temp1.push(item.temp1)
