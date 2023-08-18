@@ -24,11 +24,25 @@ router.post("/data",async(req,res)=>{
 
 router.get("/getData",async(req,res)=>{
     try {
+      let rpm = []
+      let temp1 = []
+      let temp2 = []
+      let temp3 = []
+      let pressure = []
+
         await sensordata.find().then((data)=>{
-            return res.status(200).json(data)
+          data.map((item)=>{
+            rpm.push(item.rpm)
+            temp1.push(item.temp1)
+            temp2.push(item.temp2)
+            temp3.push(item.temp3)
+            pressure.push(item.pressure)
+          })
+           console.log(rpm,temp1,temp2,temp3,pressure)
         })
+        res.status(200).json({rpm,temp1,temp2,temp3,pressure})
     } catch (error) {
-        
+        console.log(error)
     }
 })
 
