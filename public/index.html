@@ -18,7 +18,7 @@
       series: [{
         name: "Temperature1",
         showInLegend: true,
-        data: [],
+        data: ["11","12","33","54"],
         tooltip: {
                 valueSuffix: ' °C'
         }
@@ -26,7 +26,7 @@
       {
         name: "Temperature2",
         showInLegend: true,
-        data: [],
+        data: [2,23,23,23,31,21,143,22],
         yAxis: 1,
         tooltip: {
                 valueSuffix: ' °C'
@@ -202,15 +202,15 @@
     }
 
     axios.get("sensors/getData").then((result) => {
-      console.log("data > > > > ",options.series[1].data)
-      options.series[0].data = result.data.temp1
-      options.series[1].data = result.data.temp2
-      options.series[2].data = result.data.temp3
-      options.series[3].data = result.data.pressure
-      options.series[4].data = result.data.rpm
+     // console.log("data > > > > ",options.series[2].data)
+      // options.series[0].data = result.data.temp1
+      // options.series[1].data = result.data.temp2
+      // options.series[2].data = result.data.temp3
+      // options.series[3].data = result.data.pressure
+      // options.series[4].data = result.data.rpm
       Highcharts.chart('chart-container', options);
     }).catch((err) => {
-      
+      console.log(err)
     });
 
 

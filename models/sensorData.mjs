@@ -6,27 +6,27 @@ const newmodel =  new mongoose.Schema({
         required:true
     },
     temp1:{
-        type:String,
+        type:Number,
         required:true
     },
     temp2:{
-        type:String,
+        type:Number,
         required:true
     },
     temp3:{
-        type:String,
+        type:Number,
         required:true
     },
     rpm:{
-        type:String,
+        type:Number,
         required:true
     },
     pressure:{
-        type:String,
+        type:Number,
         required:true
     },
     time:{
-        type:String,
+        type:Number,
         required:true
     }
 })
