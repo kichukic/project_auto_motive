@@ -1,14 +1,15 @@
-
+// Define the Highcharts configuration options
 var options = {
-    chart: { renderTo: 'chart-temperature1' },
-    title: { text: 'Automotive Plots', align : 'left' },
-    subtitle : { text: '5 sensors', align : 'left'},
-    series: [{
+  chart: { renderTo: 'chart-container' },
+  title: { text: 'Automotive Plots', align: 'left' },
+  subtitle: { text: '5 sensors', align: 'left' },
+  series: [
+    {
       name: "Temperature1",
       showInLegend: true,
       data: [],
       tooltip: {
-              valueSuffix: ' °C'
+        valueSuffix: ' °C'
       }
     },
     {
@@ -17,7 +18,7 @@ var options = {
       data: [],
       yAxis: 1,
       tooltip: {
-              valueSuffix: ' °C'
+        valueSuffix: ' °C'
       }
     },
     {
@@ -26,7 +27,7 @@ var options = {
       data: [],
       yAxis: 2,
       tooltip: {
-              valueSuffix: ' °C'
+        valueSuffix: ' °C'
       }
     },
     {
@@ -35,7 +36,7 @@ var options = {
       data: [],
       yAxis: 3,
       tooltip: {
-              valueSuffix: ' kPa'
+        valueSuffix: ' kPa'
       }
     },
     {
@@ -44,151 +45,183 @@ var options = {
       data: [],
       yAxis: 4,
       tooltip: {
-              valueSuffix: ' rpm'
+        valueSuffix: ' rpm'
       }
-    }],
-    plotOptions: {
-      line: {
-        animation: false,
-        dataLabels: { enabled: true }
-      },
-      series: [{ color: '#059e8a' },{ color: '#049e8a' },{ color: '#039e8a' },{ color: '#029e8a' },{ color: '#019e8a' }]
+    }
+  ],
+  plotOptions: {
+    line: {
+      animation: false,
+      dataLabels: { enabled: true }
     },
-    xAxis: {
-      type: 'datetime',
-      title: { text: 'Time' },
-      dateTimeLabelFormats: { second: '%H:%M:%S' }
+    series: [
+      { color: '#059e8a' },
+      { color: '#049e8a' },
+      { color: '#039e8a' },
+      { color: '#029e8a' },
+      { color: '#019e8a' }
+    ]
+  },
+  xAxis: {
+    type: 'datetime',
+    title: { text: 'Time' },
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: [
+    {
+      title: {
+        text: 'Temperature 1',
+        style: {
+          color: Highcharts.getOptions().colors[0]
+        }
+      },
+      labels: {
+        format: '{value} °C',
+        style: {
+          color: Highcharts.getOptions().colors[0]
+        }
+      },
+      opposite: true
     },
-    yAxis: [{
-      title: { text: 'Temperature 1' ,
-      style: {
-                  color: Highcharts.getOptions().colors[0]
-             }
-      },
-      labels: {
-              format: '{value} °C',
-              style: {
-                  color: Highcharts.getOptions().colors[0]
-              }
-      },
-      opposite: true},
-      {
+    {
       gridLineWidth: 0,
-      title: { text: 'Temperature 2',
+      title: {
+        text: 'Temperature 2',
         style: {
-                  color: Highcharts.getOptions().colors[1]
-               }	  
+          color: Highcharts.getOptions().colors[1]
+        }
       },
       labels: {
-              format: '{value} °C',
-              style: {
-                  color: Highcharts.getOptions().colors[1]
-              }
+        format: '{value} °C',
+        style: {
+          color: Highcharts.getOptions().colors[1]
+        }
       },
-      opposite : true},
-      {
+      opposite: true
+    },
+    {
       gridLineWidth: 0,
-      title: { text: 'Temperature 3',
+      title: {
+        text: 'Temperature 3',
         style: {
-                  color: Highcharts.getOptions().colors[2]
-               }
+          color: Highcharts.getOptions().colors[2]
+        }
       },
       labels: {
-              format: '{value} °C',
-              style: {
-                  color: Highcharts.getOptions().colors[2]
-              }
-      },
-      opposite: true},
-      {
-      title: { text: 'Pressure',
+        format: '{value} °C',
         style: {
-                  color: Highcharts.getOptions().colors[3]
-               }
+          color: Highcharts.getOptions().colors[2]
+        }
+      },
+      opposite: true
+    },
+    {
+      title: {
+        text: 'Pressure',
+        style: {
+          color: Highcharts.getOptions().colors[3]
+        }
       },
       labels: {
-              format: '{value} kPa',
-              style: {
-                  color: Highcharts.getOptions().colors[3]
-              }
-      },
-      },
-      {
-      title: { text: 'RPM',
+        format: '{value} kPa',
         style: {
-                  color: Highcharts.getOptions().colors[4]
-               }
-  
-      },
-      labels: {
-              format: '{value} rpm',
-              style: {
-                  color: Highcharts.getOptions().colors[4]
-              }
+          color: Highcharts.getOptions().colors[3]
+        }
       }
-      }
-      ],
-      tooltip: {
-          shared: true
+    },
+    {
+      title: {
+        text: 'RPM',
+        style: {
+          color: Highcharts.getOptions().colors[4]
+        }
       },
-    credits: { enabled: false },
-      responsive: {
-          rules: [{
-              condition: {
-                  maxWidth: 500
+      labels: {
+        format: '{value} rpm',
+        style: {
+          color: Highcharts.getOptions().colors[4]
+        }
+      }
+    }
+  ],
+  tooltip: {
+    shared: true
+  },
+  credits: { enabled: false },
+  responsive: {
+    rules: [
+      {
+        condition: {
+          maxWidth: 500
+        },
+        chartOptions: {
+          legend: {
+            floating: false,
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom',
+            x: 0,
+            y: 0
+          },
+          yAxis: [
+            {
+              labels: {
+                align: 'left',
+                x: 0,
+                y: -6
               },
-              chartOptions: {
-                  legend: {
-                      floating: false,
-                      layout: 'horizontal',
-                      align: 'center',
-                      verticalAlign: 'bottom',
-                      x: 0,
-                      y: 0
-                  },
-                  yAxis: [{
-                      labels: {
-                          align: 'left',
-                          x: 0,
-                          y: -6
-                      },
-                      showLastLabel: false
-                  }, {
-                      labels: {
-                          align: 'left',
-                          x: 0,
-                          y: -6
-                      },
-                      showLastLabel: false
-                  },{
-                      labels: {
-                          align: 'left',
-                          x: 0,
-                          y: -6
-                      },
-                      showLastLabel: false
-                  },{
-                      labels: {
-                          align: 'right',
-                          x: 0,
-                          y: -6
-                      },
-                      showLastLabel: false
-                  },{
-                      labels: {
-                          align: 'right',
-                          x: 0,
-                          y: -6
-                      },
-                      showLastLabel: false
-                  }, {
-                      visible: false
-                  }]
-              }
-          }]
+              showLastLabel: false
+            },
+            {
+              labels: {
+                align: 'left',
+                x: 0,
+                y: -6
+              },
+              showLastLabel: false
+            },
+            {
+              labels: {
+                align: 'left',
+                x: 0,
+                y: -6
+              },
+              showLastLabel: false
+            },
+            {
+              labels: {
+                align: 'right',
+                x: 0,
+                y: -6
+              },
+              showLastLabel: false
+            },
+            {
+              labels: {
+                align: 'right',
+                x: 0,
+                y: -6
+              },
+              showLastLabel: false
+            },
+            {
+              visible: false
+            }
+          ]
+        }
       }
+    ]
   }
+};
 
-// Create the chart
-Highcharts.chart('chart-container', options);
-
+// Fetch data from the server using Axios
+axios.get("sensors/getData").then((result) => {
+  options.series[0].data = result.data.temp1;
+  options.series[1].data = result.data.temp2;
+  options.series[2].data = result.data.temp3;
+  options.series[3].data = result.data.pressure;
+  options.series[4].data = result.data.rpm;
+  Highcharts.chart('chart-container', options);
+}).catch((err) => {
+  console.log(err);
+});

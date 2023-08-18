@@ -10,6 +10,7 @@ router.post("/data",async(req,res)=>{
       return res.status(400).json({messgae : "no data or some parameters missed"})
     }
   if(SnsrDat.data){
+    console.log(">>> >>  >",SnsrDat.data.time)
   await sensordata.create(SnsrDat.data)
   return res.status(200).json({messgae : "data inserted sucessfully"})
   }
