@@ -1,6 +1,12 @@
+// Import Highcharts module
+
 // Define the Highcharts configuration options
 var options = {
   chart: { renderTo: 'chart-container' },
+  chart: {
+    renderTo: 'chart-container',
+    backgroundColor: '#f2f2f2' // Set the background color to grey
+  },
   title: { text: 'Automotive Plots', align: 'left' },
   subtitle: { text: '5 sensors', align: 'left' },
   series: [
@@ -51,7 +57,7 @@ var options = {
   ],
   plotOptions: {
     line: {
-      animation: false,
+      animation: true, // Enable animation for the series
       dataLabels: { enabled: true }
     },
     series: [
@@ -223,7 +229,11 @@ axios.get("sensors/getData").then((result) => {
   options.series[2].data = result.data.temp3;
   options.series[3].data = result.data.pressure;
   options.series[4].data = result.data.rpm;
-  Highcharts.chart('chart-container', options);
+
+  // Add a delay before rendering the chart with animation
+  setTimeout(function () {
+    Highcharts.chart('chart-container', options);
+  }, 500); // Adjust the delay duration as needed
 }).catch((err) => {
   console.log(err);
 });
