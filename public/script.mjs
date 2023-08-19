@@ -65,7 +65,8 @@ var options = {
   xAxis: {
     type: 'datetime',
     title: { text: 'Time' },
-    dateTimeLabelFormats: { second: '%H:%M:%S' }
+    dateTimeLabelFormats: { second: '%H:%M:%S' },
+    categories: [] 
   },
   yAxis: [
     {
@@ -216,6 +217,7 @@ var options = {
 
 // Fetch data from the server using Axios
 axios.get("sensors/getData").then((result) => {
+  options.xAxis.categories = result.data.formattedDate;
   options.series[0].data = result.data.temp1;
   options.series[1].data = result.data.temp2;
   options.series[2].data = result.data.temp3;
