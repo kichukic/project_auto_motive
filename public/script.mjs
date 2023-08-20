@@ -1,5 +1,5 @@
 // Import Highcharts module
-
+const socket = io()
 // Define the Highcharts configuration options
 var options = {
   chart: { renderTo: 'chart-container' },
@@ -221,19 +221,53 @@ var options = {
   }
 };
 
-// Fetch data from the server using Axios
-axios.get("sensors/getData").then((result) => {
-  options.xAxis.categories = result.data.formattedDate;
-  options.series[0].data = result.data.temp1;
-  options.series[1].data = result.data.temp2;
-  options.series[2].data = result.data.temp3;
-  options.series[3].data = result.data.pressure;
-  options.series[4].data = result.data.rpm;
 
-  // Add a delay before rendering the chart with animation
-  setTimeout(function () {
-    Highcharts.chart('chart-container', options);
-  }, 500); // Adjust the delay duration as needed
-}).catch((err) => {
-  console.log(err);
-});
+//trying socket implimentation here
+
+
+
+// Fetch data from the server using Axios
+
+const fetchLiveData = async () => {
+    axios.get("sensors/getData")
+    .then((result) => {
+      options.xAxis.categories = result.data.formattedDate;
+      options.series[0].data = result.data.temp1;
+      options.series[1].data = result.data.temp2;
+      options.series[2].data = result.data.temp3;
+      options.series[3].data = result.data.pressure;
+      options.series[4].data = result.data.rpm;
+      Highcharts.chart('chart-container', options);
+      
+      // Fetch and update data again after a delay
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+socket.on("dataPosted", () => {
+  fetchLiveData();
+})
+fetchLiveData()
+
+// setInterval(function () {
+//     location.reload();
+//   }, 15000);
+
+
+// axios.get("sensors/getData").then((result) => {
+//   options.xAxis.categories = result.data.formattedDate;
+//   options.series[0].data = result.data.temp1;
+//   options.series[1].data = result.data.temp2;
+//   options.series[2].data = result.data.temp3;
+//   options.series[3].data = result.data.pressure;
+//   options.series[4].data = result.data.rpm;
+
+//   // Add a delay before rendering the chart with animation
+//   setTimeout(function () {
+//     Highcharts.chart('chart-container', options);
+//   }, 900); // Adjust the delay duration as needed
+// }).catch((err) => {
+//   console.log(err);
+// });

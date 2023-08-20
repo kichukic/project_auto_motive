@@ -1,5 +1,7 @@
 import express from "express";
  const router = express.Router();
+ import { io } from "../app.mjs";
+ import {Server} from  "socket.io"
  import { sensordata } from "../models/sensorData.mjs";
 
 
@@ -15,6 +17,7 @@ router.post("/data",async(req,res)=>{
    new Date(SnsrDat.data.time * 1000); // i know weird , but works
     }
   await sensordata.create(SnsrDat.data)
+  io.emit("dataPosted",)
   return res.status(200).json({messgae : "data inserted sucessfully"})
   }
  } catch (error) {
