@@ -2,12 +2,25 @@
 <html>
 <head>
     <title>Highcharts Demo</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+
+    <style>
+      body {
+        background-image: url('');
+        background-size: cover; /* Adjust the background size as needed */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* Fixed background position while scrolling */
+        /* Additional styles for the body, if needed */
+      }
+    </style>
 </head>
+
 <body>
-  <h1>Automotive Plots</h1>
+  <div class="animated-background"></div>
+  <h1 class="fire-text">Automotive Plots</h1>
     <div id="chart-container"></div>
     <script src="./script.mjs"></script>
 </body>

@@ -5,7 +5,7 @@ var options = {
   chart: { renderTo: 'chart-container' },
   chart: {
     renderTo: 'chart-container',
-    backgroundColor: '#f2f2f2' // Set the background color to grey
+    backgroundColor: 'white' // Set the background color to grey
   },
   title: { text: 'Automotive Plots', align: 'left' },
   subtitle: { text: '5 sensors', align: 'left' },

@@ -26,3 +26,59 @@ p{
 .button2 {
   background-color: #f44336;
 }
+
+@keyframes flicker {
+  0%, 100% {
+      opacity: 0.8;
+  }
+  10%, 90% {
+      opacity: 0.5;
+  }
+  20%, 80% {
+      opacity: 0.7;
+  }
+  30%, 70% {
+      opacity: 0.4;
+  }
+  40%, 60% {
+      opacity: 0.6;
+  }
+  50% {
+      opacity: 0.3;
+  }
+}
+
+.fire-text {
+  font-size: 3em;
+  text-transform: uppercase;
+  color: transparent;
+  background: linear-gradient(to bottom, rgb(1, 1, 1) , black);
+  background-clip: text;
+  animation: flicker 60s infinite;
+}
+
+
+
+.animated-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200%; /* Double the width to cover the entire screen */
+  height: 100%;
+  background-image: url('white_modern_minimalist_architecture-wallpaper-7680x4800.jpg');
+  background-size: cover;
+  animation: animateBackground 200s infinite; /* Adjust the duration */
+}
+
+@keyframes animateBackground {
+  0%, 100% {
+      transform: translateX(0);
+  }
+  50% {
+      transform: translateX(-50%); /* Move the background left by half of its width */
+  }
+}
+
+
+
+
