@@ -1,6 +1,6 @@
 import express from "express";
  const router = express.Router();
- import { io } from "../app.mjs";
+ import { io } from "../automotive.mjs";
  import {Server} from  "socket.io"
  import { sensordata } from "../models/sensorData.mjs";
 

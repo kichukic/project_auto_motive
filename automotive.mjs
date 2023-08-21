@@ -33,7 +33,7 @@ io.on("connection",(socket)=>{
 })
 
 
-app.get("/home", (req, res) => {
+app.get("/automotiveplots", (req, res) => {
   res.sendFile(path.join(publicFolderPath, "index.html"));
 });
 
