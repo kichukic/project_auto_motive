@@ -80,5 +80,48 @@ p{
 }
 
 
+/* Apply styles to the "Clear Chart" button */
+#clearButton {
+  background-color: #f44336; /* Red background color */
+  color: white; /* Text color */
+  border: none; /* No border */
+  border-radius: 4px; /* Rounded corners */
+  padding: 10px 20px; /* Padding around the text */
+  font-size: 16px; /* Font size */
+  cursor: pointer; /* Show hand cursor on hover */
+  transition: background-color 0.3s; /* Smooth transition for background color change */
+}
+
+/* Apply hover effect to the button */
+#clearButton:hover {
+  background-color: #d32f2f; /* Darker red on hover */
+}
+
+
+/* Apply styles to the "Prev" and "Next" buttons */
+#prevButton,
+#nextButton {
+  background-color: #008CBA; /* Blue background color */
+  color: white; /* Text color */
+  border: none; /* No border */
+  border-radius: 4px; /* Rounded corners */
+  padding: 10px 20px; /* Padding around the text */
+  font-size: 16px; /* Font size */
+  cursor: pointer; /* Show hand cursor on hover */
+  margin: 5px; /* Margin between buttons */
+  transition: background-color 0.3s; /* Smooth transition for background color change */
+}
+
+/* Apply hover effect to the "Prev" and "Next" buttons */
+#prevButton:hover,
+#nextButton:hover {
+  background-color: #0077A3; /* Darker blue on hover */
+}
+#parameterToggleText {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin-top: 10px;
+}
 
 
