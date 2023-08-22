@@ -57,7 +57,7 @@ var options = {
   ],
   plotOptions: {
     line: {
-      animation: true, // Enable animation for the series
+      animation: false, // Enable animation for the series
       dataLabels: { enabled: true }
     },
     series: [
@@ -72,7 +72,8 @@ var options = {
     type: 'datetime',
     title: { text: 'Time' },
     dateTimeLabelFormats: { second: '%H:%M:%S' },
-    categories: [] 
+    categories: [] ,
+    reversed : true
   },
   yAxis: [
     {
@@ -227,47 +228,33 @@ var options = {
 
 
 // Fetch data from the server using Axios
-
+const chart = Highcharts.chart('chart-container', options);
 const fetchLiveData = async () => {
-    axios.get("sensors/getData")
-    .then((result) => {
-      options.xAxis.categories = result.data.formattedDate;
-      options.series[0].data = result.data.temp1;
-      options.series[1].data = result.data.temp2;
-      options.series[2].data = result.data.temp3;
-      options.series[3].data = result.data.pressure;
-      options.series[4].data = result.data.rpm;
-      Highcharts.chart('chart-container', options);
-      
-      // Fetch and update data again after a delay
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
+  try {
+    const result = await axios.get('sensors/getData');
+    const categories = result.data.formattedDate;
+    const temp1Data = result.data.temp1;
+    const temp2Data = result.data.temp2;
+    const temp3Data = result.data.temp3;
+    const pressureData = result.data.pressure;
+    const rpmData = result.data.rpm;
 
+    // Update the categories and series data directly
+    chart.xAxis[0].update({ categories: categories }, false);
+    chart.series[0].setData(temp1Data, false);
+    chart.series[1].setData(temp2Data, false);
+    chart.series[2].setData(temp3Data, false);
+    chart.series[3].setData(pressureData, false);
+    chart.series[4].setData(rpmData, false);
+
+    // Redraw the chart without animation
+    chart.redraw(false);
+
+  } catch (err) {
+    console.log(err);
+  }
+};
 socket.on("dataPosted", () => {
   fetchLiveData();
 })
 fetchLiveData()
-
-// setInterval(function () {
-//     location.reload();
-//   }, 15000);
-
-
-// axios.get("sensors/getData").then((result) => {
-//   options.xAxis.categories = result.data.formattedDate;
-//   options.series[0].data = result.data.temp1;
-//   options.series[1].data = result.data.temp2;
-//   options.series[2].data = result.data.temp3;
-//   options.series[3].data = result.data.pressure;
-//   options.series[4].data = result.data.rpm;
-
-//   // Add a delay before rendering the chart with animation
-//   setTimeout(function () {
-//     Highcharts.chart('chart-container', options);
-//   }, 900); // Adjust the delay duration as needed
-// }).catch((err) => {
-//   console.log(err);
-// });
