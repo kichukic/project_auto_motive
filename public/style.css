@@ -1,127 +1,138 @@
-html {
-  font-family: Helvetica;
-  display: inline-block;
-  margin: 0px auto;
-  text-align: center;
-}
-h1{
-  color: #0F3376;
-  padding: 2vh;
-}
-p{
-  font-size: 1.5rem;
-}
-.button {
-  display: inline-block;
-  background-color: #008CBA;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  padding: 16px 40px;
-  text-decoration: none;
-  font-size: 30px;
-  margin: 2px;
-  cursor: pointer;
-}
-.button2 {
-  background-color: #f44336;
-}
-
-@keyframes flicker {
-  0%, 100% {
-      opacity: 0.8;
+  html {
+    font-family: Helvetica;
+    display: inline-block;
+    margin: 0px auto;
+    text-align: center;
   }
-  10%, 90% {
-      opacity: 0.5;
+  h1{
+    color: #0F3376;
+    padding: 2vh;
   }
-  20%, 80% {
-      opacity: 0.7;
+  p{
+    font-size: 1.5rem;
   }
-  30%, 70% {
-      opacity: 0.4;
+  .button {
+    display: inline-block;
+    background-color: #008CBA;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 16px 40px;
+    text-decoration: none;
+    font-size: 30px;
+    margin: 2px;
+    cursor: pointer;
   }
-  40%, 60% {
-      opacity: 0.6;
+  .button2 {
+    background-color: #f44336;
   }
-  50% {
-      opacity: 0.3;
+
+  @keyframes flicker {
+    0%, 100% {
+        opacity: 0.8;
+    }
+    10%, 90% {
+        opacity: 0.5;
+    }
+    20%, 80% {
+        opacity: 0.7;
+    }
+    30%, 70% {
+        opacity: 0.4;
+    }
+    40%, 60% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 0.3;
+    }
   }
-}
 
-.fire-text {
-  font-size: 3em;
-  text-transform: uppercase;
-  color: transparent;
-  background: linear-gradient(to bottom, rgb(1, 1, 1) , black);
-  background-clip: text;
-  animation: flicker 60s infinite;
-}
-
-
-
-.animated-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 200%; /* Double the width to cover the entire screen */
-  height: 100%;
-  background-image: url('white_modern_minimalist_architecture-wallpaper-7680x4800.jpg');
-  background-size: cover;
-  animation: animateBackground 200s infinite; /* Adjust the duration */
-}
-
-@keyframes animateBackground {
-  0%, 100% {
-      transform: translateX(0);
+  .fire-text {
+    font-size: 3em;
+    text-transform: uppercase;
+    color: transparent;
+    background: linear-gradient(to bottom, rgb(1, 1, 1) , black);
+    background-clip: text;
+    animation: flicker 60s infinite;
   }
-  50% {
-      transform: translateX(-50%); /* Move the background left by half of its width */
+
+
+
+  .animated-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200%; /* Double the width to cover the entire screen */
+    height: 100%;
+    background-image: url('white_modern_minimalist_architecture-wallpaper-7680x4800.jpg');
+    background-size: cover;
+    animation: animateBackground 200s infinite; /* Adjust the duration */
   }
-}
+
+  @keyframes animateBackground {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(-50%); /* Move the background left by half of its width */
+    }
+  }
 
 
-/* Apply styles to the "Clear Chart" button */
-#clearButton {
-  background-color: #f44336; /* Red background color */
-  color: white; /* Text color */
-  border: none; /* No border */
-  border-radius: 4px; /* Rounded corners */
-  padding: 10px 20px; /* Padding around the text */
-  font-size: 16px; /* Font size */
-  cursor: pointer; /* Show hand cursor on hover */
-  transition: background-color 0.3s; /* Smooth transition for background color change */
-}
+  /* Apply styles to the "Clear Chart" button */
+  #clearButton {
+    background-color: #0f61a9; /* Red background color */
+    color: white; /* Text color */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 10px 20px; /* Padding around the text */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Show hand cursor on hover */
+    transition: background-color 0.3s; /* Smooth transition for background color change */
+  }
 
-/* Apply hover effect to the button */
-#clearButton:hover {
-  background-color: #d32f2f; /* Darker red on hover */
-}
+  /* Apply hover effect to the button */
+  #clearButton:hover {
+    background-color: #f34500; /* Darker red on hover */
+  }
 
 
-/* Apply styles to the "Prev" and "Next" buttons */
-#prevButton,
-#nextButton {
-  background-color: #008CBA; /* Blue background color */
-  color: white; /* Text color */
-  border: none; /* No border */
-  border-radius: 4px; /* Rounded corners */
-  padding: 10px 20px; /* Padding around the text */
-  font-size: 16px; /* Font size */
-  cursor: pointer; /* Show hand cursor on hover */
-  margin: 5px; /* Margin between buttons */
-  transition: background-color 0.3s; /* Smooth transition for background color change */
-}
+  /* Apply styles to the "Prev" and "Next" buttons */
+  #prevButton,
+  #nextButton {
+    background-color: #ff6b6b; /* Vibrant red background color */
+    color: white; /* Text color */
+    border: none; /* No border */
+    border-radius: 50px; /* Circular shape */
+    padding: 12px 24px; /* Padding */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Show hand cursor on hover */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transitions for background color and transform */
+  }
+  
+  /* Apply hover and active effects to the "Prev" and "Next" buttons */
+  #prevButton:hover,
+  #nextButton:hover {
+    background-color: #ff8f8f; /* Lighter red on hover */
+    transform: translateY(-3px); /* Move button slightly up on hover */
+  }
+  
+  #prevButton:active,
+  #nextButton:active {
+    transform: translateY(3px); /* Move button slightly down on click */
+  }
 
-/* Apply hover effect to the "Prev" and "Next" buttons */
-#prevButton:hover,
-#nextButton:hover {
-  background-color: #0077A3; /* Darker blue on hover */
-}
-#parameterToggleText {
-  text-align: center;
-  font-size: 14px;
-  color: #666;
-  margin-top: 10px;
-}
+
+
+
+
+  
+  #parameterToggleText {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-top: 10px;
+  }
 
 

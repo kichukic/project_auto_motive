@@ -225,7 +225,73 @@ var options = {
 };
 
 
-//trying socket implimentation here
+// Initialize Flatpickr for "From" date and time picker
+// Update your existing code to fetch data using the selected date range
+const fetchDataByDateRange = async (fromDate, toDate) => {
+  try {
+     const formattedFromDate = new Date(fromDate).getTime();
+    const formattedToDate = new Date(toDate).getTime();
+
+    const result = await axios.get('/sensors/getDataByDateRange', {
+      params: {
+        from: formattedFromDate,
+        to: formattedToDate,
+        limit : 30,
+      },
+    });
+    console.log(result)
+    const categories = result.data.formattedDate;
+    const temp1Data = result.data.temp1;
+    const temp2Data = result.data.temp2;
+    const temp3Data = result.data.temp3;
+    const pressureData = result.data.pressure;
+    const rpmData = result.data.rpm;
+
+    chart.xAxis[0].categories = [];
+    chart.series.forEach((series) => {
+      series.setData([], false);
+    });
+
+    // Update the categories and series data directly
+    chart.xAxis[0].update({ categories: categories }, false);
+    chart.series[0].setData(temp1Data, false);
+    chart.series[1].setData(temp2Data, false);
+    chart.series[2].setData(temp3Data, false);
+    chart.series[3].setData(pressureData, false);
+    chart.series[4].setData(rpmData, false);
+
+    // Redraw the chart without animation
+    chart.redraw(false);
+
+  } catch (error) {
+      console.log(error);
+  }
+};
+
+// Modify the onChange handlers for the "From" and "To" date pickers
+flatpickr("#fromDateTimePicker", {
+  // ... Existing config ...
+  enableTime: true, // Enable time selection
+  onChange: function(selectedDates, dateStr) {
+    console.log("Selected 'From' date and time:", dateStr);
+    // You might want to trigger data fetching here based on the selected range
+    const toDateStr = document.querySelector("#toDateTimePicker").value;
+    fetchDataByDateRange(dateStr, toDateStr);
+  }
+});
+
+flatpickr("#toDateTimePicker", {
+  // ... Existing config ...
+  enableTime: true, // Enable time selection
+  onChange: function(selectedDates, dateStr) {
+    console.log("Selected 'To' date and time:", dateStr);
+    // You might want to trigger data fetching here based on the selected range
+    const fromDateStr = document.querySelector("#fromDateTimePicker").value;
+    fetchDataByDateRange(fromDateStr, dateStr);
+  }
+});
+
+
 
 
 
@@ -241,6 +307,7 @@ const fetchLiveData = async () => {
     const pressureData = result.data.pressure;
     const rpmData = result.data.rpm;
 
+    console.log("livedata  > >>",result.data)
     // Update the categories and series data directly
     chart.xAxis[0].update({ categories: categories }, false);
     chart.series[0].setData(temp1Data, false);

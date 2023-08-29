@@ -3,6 +3,7 @@ import express from "express";
  import { io } from "../automotive.mjs";
  import {Server} from  "socket.io"
  import { sensordata } from "../models/sensorData.mjs";
+ import { parseISO } from "date-fns";
 
 
 router.post("/data",async(req,res)=>{
@@ -36,20 +37,21 @@ router.get("/getData",async(req,res)=>{
       let pressure = []
       let formattedDate = []
 
-        await sensordata.find().sort({_id: -1}).limit(20).then((data)=>{
+        await sensordata.find().sort({_id: -1}).limit(25).then((data)=>{
           data.map((item)=>{
             rpm.push(item.rpm)
             temp1.push(item.temp1)
             temp2.push(item.temp2)
             temp3.push(item.temp3)
             pressure.push(item.pressure)
-            console.log(item.time)
+           // console.log(item.time)
             let epoch = new Date(item.time * 1000);
           let options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
           let formatted = epoch.toLocaleString('en-US', options);
           formattedDate.push(formatted);  
+          console.log(" > >>> > > > > ++ +++++",formatted)
           })
-           console.log(rpm,temp1,temp2,temp3,pressure,formattedDate)
+  //        console.log(rpm,temp1,temp2,temp3,pressure,formattedDate)
         })
         res.status(200).json({rpm,temp1,temp2,temp3,pressure,formattedDate})
     } catch (error) {
@@ -64,11 +66,11 @@ router.get("/getData",async(req,res)=>{
 router.get("/getDatByPage", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 0; // Get the page number from the query, default to 0
-    const pageSize = parseInt(req.query.pageSize) || 20; // Get the page size from the query, default to 20
+    const pageSize = parseInt(req.query.pageSize) || 25; // Get the page size from the query, default to 20
 
     // Calculate skip value based on page and pageSize
     const skip = page * pageSize;
-    console.log("the page number receiving   > >> > > > >",page)
+   // console.log("the page number receiving   > >> > > > >",page)
 
     let rpm = []
     let temp1 = []
@@ -89,7 +91,7 @@ router.get("/getDatByPage", async (req, res) => {
           temp2.push(item.temp2)
           temp3.push(item.temp3)
           pressure.push(item.pressure)
-          console.log(item.time)
+        //  console.log(item.time)
           let epoch = new Date(item.time * 1000);
         let options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
         let formatted = epoch.toLocaleString('en-US', options);
@@ -113,6 +115,43 @@ router.delete("/clearData", async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
+router.get("/getDataByDateRange", async (req, res) => {
+  try {
+    let rpm = []
+    let temp1 = []
+    let temp2 = []
+    let temp3 = []
+    let pressure = []
+    let formattedDate = []
+       const fromDate = req.query.from // Convert string to Date object
+       const toDate = req.query.to; // Convert string to Date object
+        console.log(" > >> >",fromDate,toDate)
+      // Fetch data from the database within the specified date range
+      const data = await sensordata.find({
+          time: { $gte: fromDate, $lte: toDate }
+      }).sort({ time: 1 }).then((data)=>{
+        data.map((item)=>{
+          rpm.push(item.rpm)
+          temp1.push(item.temp1)
+          temp2.push(item.temp2)
+          temp3.push(item.temp3)
+          pressure.push(item.pressure)
+        //  console.log(item.time)
+          let epoch = new Date(item.time * 1000);
+        let options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+        let formatted = epoch.toLocaleString('en-US', options);
+        formattedDate.push(formatted); 
+        })
+      })
+        console.log(">> > > > > the selected data >>>",data)
+        return  res.status(200).json({rpm,temp1,temp2,temp3,pressure,formattedDate})
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
   }
 });
 

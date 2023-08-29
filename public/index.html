@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Highcharts Demo</title>
+    <title>Automotive Plots</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
@@ -20,6 +22,8 @@
 
 <body>
   <h1 class="fire-text">Automotive Plots</h1>
+  <input type="text" id="fromDateTimePicker" placeholder="Select start date and time">
+  <input type="text" id="toDateTimePicker" placeholder="Select end  date and time">
   <div id="chart-container"></div>
 <div id="parameterToggleText">Click on the parameters to hide or show them on the chart</div>
     <div id="chart-container"></div>
