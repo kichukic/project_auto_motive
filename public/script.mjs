@@ -236,10 +236,9 @@ const fetchDataByDateRange = async (fromDate, toDate) => {
       params: {
         from: formattedFromDate,
         to: formattedToDate,
-        limit : 30,
       },
     });
-    console.log(result)
+    console.log(result.data.temp1)
     const categories = result.data.formattedDate;
     const temp1Data = result.data.temp1;
     const temp2Data = result.data.temp2;

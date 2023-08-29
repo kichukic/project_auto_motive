@@ -51,7 +51,7 @@ router.get("/getData",async(req,res)=>{
           formattedDate.push(formatted);  
           console.log(" > >>> > > > > ++ +++++",formatted)
           })
-  //        console.log(rpm,temp1,temp2,temp3,pressure,formattedDate)
+          console.log(rpm,temp1,temp2,temp3,pressure,formattedDate)
         })
         res.status(200).json({rpm,temp1,temp2,temp3,pressure,formattedDate})
     } catch (error) {
@@ -99,7 +99,6 @@ router.get("/getDatByPage", async (req, res) => {
         })
       })
     return  res.status(200).json({rpm,temp1,temp2,temp3,pressure,formattedDate})
-    // Process the data as needed
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal server error" });
@@ -127,13 +126,16 @@ router.get("/getDataByDateRange", async (req, res) => {
     let temp3 = []
     let pressure = []
     let formattedDate = []
+    const page = parseInt(req.query.page) || 0; // Get the page number from the query, default to 0
+    const pageSize = parseInt(req.query.pageSize) || 50; // Get the page size from the query, default to 20
+    const skip = page * pageSize;
        const fromDate = req.query.from // Convert string to Date object
        const toDate = req.query.to; // Convert string to Date object
         console.log(" > >> >",fromDate,toDate)
       // Fetch data from the database within the specified date range
       const data = await sensordata.find({
           time: { $gte: fromDate, $lte: toDate }
-      }).sort({ time: 1 }).then((data)=>{
+      }).sort({ time: 1 }).skip(skip).limit(pageSize).then((data)=>{
         data.map((item)=>{
           rpm.push(item.rpm)
           temp1.push(item.temp1)
@@ -147,7 +149,6 @@ router.get("/getDataByDateRange", async (req, res) => {
         formattedDate.push(formatted); 
         })
       })
-        console.log(">> > > > > the selected data >>>",data)
         return  res.status(200).json({rpm,temp1,temp2,temp3,pressure,formattedDate})
   } catch (error) {
       console.error(error);
