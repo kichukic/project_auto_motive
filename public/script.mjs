@@ -1,5 +1,10 @@
 // Import Highcharts module
 const socket = io()
+
+
+
+
+
 // Define the Highcharts configuration options
 var options = {
   chart: { renderTo: 'chart-container' },
@@ -225,6 +230,10 @@ var options = {
 };
 
 
+
+
+
+
 // Modify the onChange handlers for the "From" and "To" date pickers
 let fromEpoch
 let toDateEpoch
@@ -284,28 +293,43 @@ clearButton.addEventListener('click', async () => {
 let currentPage = 0; // Track the current page for pagination
 const pageSize = 20; // Number of data points to display per page
 
-const fetchData = async(page,fromdate,todate)=>{
+const fetchData = async (page, fromdate, todate) => {
   try {
-    let apiEndpoint
-    let params= {}
-    if(fromdate&&todate){
+    let apiEndpoint;
+    let params = {};
+    if (fromdate && todate) {
       apiEndpoint = '/sensors/getDataByDateRange';
-      params ={
-        from:fromdate,
-        to : todate,
-        page:page,
-        pageSize:pageSize
-      }
-    }else{
+      params = {
+        from: fromdate,
+        to: todate,
+        page: page,
+        pageSize: pageSize,
+      };
+    } else {
       apiEndpoint = '/sensors/getDatByPage';
       params = {
         page: page,
         pageSize: pageSize,
       };
     }
-    console.log("the end point is        >>>>>>",apiEndpoint)
+
     const result = await axios.get(apiEndpoint, { params });
-    console.log("fetched data is >>>>>>",result.data)
+
+    // Check if any of the data arrays are empty
+    if (
+      !result.data.rpm.length ||
+      !result.data.temp1.length ||
+      !result.data.temp2.length ||
+      !result.data.temp3.length ||
+      !result.data.pressure.length ||
+      !result.data.formattedDate.length
+    ){
+      showPopup(); // Show the popup if there's no data
+      return; // Return to avoid further processing
+    } else {
+      hidePopup(); // Hide the popup if there's data
+    }
+
     const categories = result.data.formattedDate;
     const temp1Data = result.data.temp1;
     const temp2Data = result.data.temp2;
@@ -323,12 +347,20 @@ const fetchData = async(page,fromdate,todate)=>{
     chart.redraw(false);
 
   } catch (error) {
-    
+    console.log(error);
   }
+};
+function showPopup() {
+  popupOverlay.style.display = 'flex';
 }
 
+// Hide popup
+function hidePopup() {
+  popupOverlay.style.display = 'none';
+}
 
-
+// Close popup when close button is clicked
+popupClose.addEventListener('click', hidePopup);
 
 prevButton.addEventListener('click', () => {
   if (currentPage > 0) {
@@ -341,6 +373,7 @@ nextButton.addEventListener('click', () => {
   currentPage += 1;
   fetchData(currentPage, fromEpoch, toDateEpoch);
 });
+
 
 
 const fetchDataByPage = async (page) => {
