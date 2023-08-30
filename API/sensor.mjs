@@ -131,11 +131,12 @@ router.get("/getDataByDateRange", async (req, res) => {
     const skip = page * pageSize;
        const fromDate = req.query.from // Convert string to Date object
        const toDate = req.query.to; // Convert string to Date object
-        console.log(" > >> >",fromDate,toDate)
+        console.log(" > >> >",fromDate,"and",toDate)
       // Fetch data from the database within the specified date range
       const data = await sensordata.find({
           time: { $gte: fromDate, $lte: toDate }
       }).sort({ time: 1 }).skip(skip).limit(pageSize).then((data)=>{
+        console.log(" + + ++  +",)
         data.map((item)=>{
           rpm.push(item.rpm)
           temp1.push(item.temp1)

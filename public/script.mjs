@@ -225,57 +225,19 @@ var options = {
 };
 
 
-// Initialize Flatpickr for "From" date and time picker
-// Update your existing code to fetch data using the selected date range
-const fetchDataByDateRange = async (fromDate, toDate) => {
-  try {
-     const formattedFromDate = new Date(fromDate).getTime();
-    const formattedToDate = new Date(toDate).getTime();
-
-    const result = await axios.get('/sensors/getDataByDateRange', {
-      params: {
-        from: formattedFromDate,
-        to: formattedToDate,
-      },
-    });
-    console.log(result.data.temp1)
-    const categories = result.data.formattedDate;
-    const temp1Data = result.data.temp1;
-    const temp2Data = result.data.temp2;
-    const temp3Data = result.data.temp3;
-    const pressureData = result.data.pressure;
-    const rpmData = result.data.rpm;
-
-    chart.xAxis[0].categories = [];
-    chart.series.forEach((series) => {
-      series.setData([], false);
-    });
-
-    // Update the categories and series data directly
-    chart.xAxis[0].update({ categories: categories }, false);
-    chart.series[0].setData(temp1Data, false);
-    chart.series[1].setData(temp2Data, false);
-    chart.series[2].setData(temp3Data, false);
-    chart.series[3].setData(pressureData, false);
-    chart.series[4].setData(rpmData, false);
-
-    // Redraw the chart without animation
-    chart.redraw(false);
-
-  } catch (error) {
-      console.log(error);
-  }
-};
-
 // Modify the onChange handlers for the "From" and "To" date pickers
+let fromEpoch
+let toDateEpoch
 flatpickr("#fromDateTimePicker", {
   // ... Existing config ...
   enableTime: true, // Enable time selection
   onChange: function(selectedDates, dateStr) {
     console.log("Selected 'From' date and time:", dateStr);
+    fromEpoch = new Date(dateStr).getTime() / 1000;
     // You might want to trigger data fetching here based on the selected range
     const toDateStr = document.querySelector("#toDateTimePicker").value;
-    fetchDataByDateRange(dateStr, toDateStr);
+   // fetchDataByDateRange(dateStr, toDateStr);
+   //fetchData(currentPage,fromDateStr,fromDateEpoch)
   }
 });
 
@@ -284,9 +246,12 @@ flatpickr("#toDateTimePicker", {
   enableTime: true, // Enable time selection
   onChange: function(selectedDates, dateStr) {
     console.log("Selected 'To' date and time:", dateStr);
+     toDateEpoch = new Date(dateStr).getTime() / 1000;
     // You might want to trigger data fetching here based on the selected range
     const fromDateStr = document.querySelector("#fromDateTimePicker").value;
-    fetchDataByDateRange(fromDateStr, dateStr);
+    console.log("data > > > >",fromDateStr)
+   // fetchDataByDateRange(fromDateStr, dateStr);
+   fetchData(currentPage,fromEpoch,toDateEpoch)
   }
 });
 
@@ -296,32 +261,7 @@ flatpickr("#toDateTimePicker", {
 
 // Fetch data from the server using Axios
 const chart = Highcharts.chart('chart-container', options);
-const fetchLiveData = async () => {
-  try {
-    const result = await axios.get('sensors/getData');
-    const categories = result.data.formattedDate;
-    const temp1Data = result.data.temp1;
-    const temp2Data = result.data.temp2;
-    const temp3Data = result.data.temp3;
-    const pressureData = result.data.pressure;
-    const rpmData = result.data.rpm;
 
-    console.log("livedata  > >>",result.data)
-    // Update the categories and series data directly
-    chart.xAxis[0].update({ categories: categories }, false);
-    chart.series[0].setData(temp1Data, false);
-    chart.series[1].setData(temp2Data, false);
-    chart.series[2].setData(temp3Data, false);
-    chart.series[3].setData(pressureData, false);
-    chart.series[4].setData(rpmData, false);
-
-    // Redraw the chart without animation
-    chart.redraw(false);
-
-  } catch (err) {
-    console.log(err);
-  }
-};
 
 const prevButton = document.getElementById('prevButton');
 const nextButton = document.getElementById('nextButton');
@@ -344,10 +284,28 @@ clearButton.addEventListener('click', async () => {
 let currentPage = 0; // Track the current page for pagination
 const pageSize = 20; // Number of data points to display per page
 
-const fetchDataByPage = async (page) => {
+const fetchData = async(page,fromdate,todate)=>{
   try {
-    const result = await axios.get(`sensors/getDatByPage?page=${page}&pageSize=${pageSize}`);
-    // Process the data and update the chart just like in your existing fetchLiveData function
+    let apiEndpoint
+    let params= {}
+    if(fromdate&&todate){
+      apiEndpoint = '/sensors/getDataByDateRange';
+      params ={
+        from:fromdate,
+        to : todate,
+        page:page,
+        pageSize:pageSize
+      }
+    }else{
+      apiEndpoint = '/sensors/getDatByPage';
+      params = {
+        page: page,
+        pageSize: pageSize,
+      };
+    }
+    console.log("the end point is        >>>>>>",apiEndpoint)
+    const result = await axios.get(apiEndpoint, { params });
+    console.log("fetched data is >>>>>>",result.data)
     const categories = result.data.formattedDate;
     const temp1Data = result.data.temp1;
     const temp2Data = result.data.temp2;
@@ -355,7 +313,6 @@ const fetchDataByPage = async (page) => {
     const pressureData = result.data.pressure;
     const rpmData = result.data.rpm;
 
-    // Update the categories and series data directly
     chart.xAxis[0].update({ categories: categories }, false);
     chart.series[0].setData(temp1Data, false);
     chart.series[1].setData(temp2Data, false);
@@ -363,24 +320,33 @@ const fetchDataByPage = async (page) => {
     chart.series[3].setData(pressureData, false);
     chart.series[4].setData(rpmData, false);
 
-    // Redraw the chart without animation
     chart.redraw(false);
-  } catch (err) {
-    console.log(err);
+
+  } catch (error) {
+    
   }
-};
+}
+
+
+
 
 prevButton.addEventListener('click', () => {
   if (currentPage > 0) {
     currentPage -= 1;
-    fetchDataByPage(currentPage);
+    fetchData(currentPage, fromEpoch, toDateEpoch);
   }
 });
 
 nextButton.addEventListener('click', () => {
   currentPage += 1;
-  fetchDataByPage(currentPage);
+  fetchData(currentPage, fromEpoch, toDateEpoch);
 });
+
+
+const fetchDataByPage = async (page) => {
+  fetchData(page);
+};
+
 
 fetchDataByPage(currentPage);
 
