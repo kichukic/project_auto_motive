@@ -4,7 +4,6 @@ const socket = io()
 
 
 
-
 // Define the Highcharts configuration options
 var options = {
   chart: { renderTo: 'chart-container' },
@@ -374,7 +373,9 @@ nextButton.addEventListener('click', () => {
   fetchData(currentPage, fromEpoch, toDateEpoch);
 });
 
-
+const fetchLiveData = async () => {
+  fetchData(currentPage, fromEpoch, toDateEpoch);
+};
 
 const fetchDataByPage = async (page) => {
   fetchData(page);
