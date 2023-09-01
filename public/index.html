@@ -22,9 +22,18 @@
 
 <body>
   <h4 class="fire-text">Automotive Plots</h4>
-  <h3>select a date and time to view the data</h3>
-  <input type="text" id="fromDateTimePicker" placeholder="Select start date and time">
-  <input type="text" id="toDateTimePicker" placeholder="Select end  date and time">
+  <h3>Select a date and time to view the historic data</h3>
+  <div class="modern-container">
+  
+    <label for="fromDateTimePicker">Start Date and Time:</label>
+    <input type="text" id="fromDateTimePicker" placeholder="Select start date and time">
+    <label for="toDateTimePicker">End Date and Time:</label>
+    <input type="text" id="toDateTimePicker" placeholder="Select end date and time">
+    <button id="drawChartButton">Fetch Data</button>
+  </div>
+  
+  
+  
   <div id="chart-container"></div>
 <div id="parameterToggleText">Click on the parameters to hide or show them on the chart</div>
     <div id="chart-container"></div>
@@ -39,24 +48,36 @@
 <button id="clearButton">Clear Chart</button>
 
 
-<label for="rpmThreshold">RPM Threshold:</label>
-<input type="number" id="rpmThreshold" placeholder="Enter RPM threshold">
+<h3>Input filter criteria to fetch data exceeding them for chart representation</h3>
+<div class="form-container">
+  <div class="form-group">
+    <label for="rpmThreshold">RPM Threshold:</label>
+    <input type="number" id="rpmThreshold" placeholder="Enter RPM threshold">
+  </div>
+  <div class="form-group">
+    <label for="temp1Threshold">Temp1 Threshold:</label>
+    <input type="number" id="temp1Threshold" placeholder="Enter Temp1 threshold">
+  </div>
+  <div class="form-group">
+    <label for="temp2Threshold">Temp2 Threshold:</label>
+    <input type="number" id="temp2Threshold" placeholder="Enter Temp2 threshold">
+  </div>
+  <div class="form-group">
+    <label for="temp3Threshold">Temp3 Threshold:</label>
+    <input type="number" id="temp3Threshold" placeholder="Enter Temp3 threshold">
+  </div>
+  <div class="form-group">
+    <label for="pressureThreshold">Pressure Threshold:</label>
+    <input type="number" id="pressureThreshold" placeholder="Enter pressure threshold">
+  </div>
+  <button id="drawChartButton">Draw Chart</button>
+</div>
 
-<!-- Temperature Thresholds -->
-<label for="temp1Threshold">Temp1 Threshold:</label>
-<input type="number" id="temp1Threshold" placeholder="Enter Temp1 threshold">
 
-<label for="temp2Threshold">Temp2 Threshold:</label>
-<input type="number" id="temp2Threshold" placeholder="Enter Temp2 threshold">
 
-<label for="temp3Threshold">Temp3 Threshold:</label>
-<input type="number" id="temp3Threshold" placeholder="Enter Temp3 threshold">
 
-<!-- Pressure Threshold -->
-<label for="pressureThreshold">Pressure Threshold:</label>
-<input type="number" id="pressureThreshold" placeholder="Enter pressure threshold">
 
-<button id="drawChartButton">Draw Chart</button>
+
 
     <script src="./script.mjs"></script>
 </body>

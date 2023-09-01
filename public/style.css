@@ -182,38 +182,97 @@
 
 
 
+/* Include Google's Roboto font */
+@import url('https://fonts.googleapis.com/css?family=Roboto');
 
-/* Create a container for the threshold input fields */
-.threshold-container {
-  display: flex;
-  flex-wrap: wrap; /* Allow input fields to wrap to the next line if needed */
-  justify-content: center; /* Center align the content horizontally */
-  align-items: center; /* Center align the content vertically */
-  margin: 20px;
-  background-color: #f7f7f7; /* Light gray background color */
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-/* Style labels for input fields */
+.form-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+
 label {
   font-weight: bold;
   margin-bottom: 5px;
-  flex: 1; /* Distribute available space evenly among labels */
 }
 
-/* Style input fields for thresholds */
 input[type="number"] {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-bottom: 10px;
-  flex: 2; /* Distribute available space evenly among input fields */
 }
 
-/* Style the "Draw Chart" button */
 #drawChartButton {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+#drawChartButton:hover {
+  background-color: #219d53;
+}
+
+  
+
+
+/* Include Google's Roboto font */
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+}
+
+.modern-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(104, 113, 241, 0.2);
+}
+
+label {
+  font-weight: bold;
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+input[type="text"] {
+  width: 150px; /* Adjust the width as needed */
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+button {
   background-color: #27ae60; /* Green background color */
   color: white; /* Text color */
   border: none; /* No border */
@@ -222,11 +281,22 @@ input[type="number"] {
   font-size: 16px; /* Font size */
   cursor: pointer; /* Show hand cursor on hover */
   transition: background-color 0.3s; /* Smooth transition for background color change */
-  margin-top: 10px;
-  flex: 2; /* Distribute available space evenly among the button */
+  margin-left: 10px;
 }
 
-/* Hover effect for the "Draw Chart" button */
-#drawChartButton:hover {
+button:hover {
   background-color: #219d53; /* Darker green on hover */
+}
+
+
+h3 {
+  text-align: left; /* Align the text within the <h3> to the left */
+  margin-bottom: 20px; /* Add some spacing between the heading and columns */
+}
+
+label, input::placeholder, button {
+  color: black;
+}
+h3 {
+  text-align: center;
 }
