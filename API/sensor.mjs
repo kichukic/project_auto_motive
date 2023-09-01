@@ -162,13 +162,13 @@ router.get("/getDataByThreshold", async (req, res) => {
   try {
     // Retrieve the values of query parameters, including potential MongoDB query operators
     const thresholds = {
-      rpm: parseFloat(req.query.rpm),
-      temp1: parseFloat(req.query.temp1),
-      temp2: parseFloat(req.query.temp2),
-      temp3: parseFloat(req.query.temp3),
-      pressure: parseFloat(req.query.pressure),
+      rpm: parseFloat(req.query.filter.rpm),
+      temp1: parseFloat(req.query.filter.temp1),
+      temp2: parseFloat(req.query.filter.temp2),
+      temp3: parseFloat(req.query.filter.temp3),
+      pressure: parseFloat(req.query.filter.pressure),
     };
-    console.log(req.query.rpm,req.query.temp1,req.query.temp2,req.query.temp3,req.query.pressure)
+    
     // Create a filter object based on the provided threshold values
     const filter = {};
 
@@ -192,13 +192,19 @@ router.get("/getDataByThreshold", async (req, res) => {
       filter.pressure = { $gte: thresholds.pressure };
     }
 
-    // Fetch data from the database based on the filter
-    let formattedDate = [];
+    // Calculate pagination parameters
+    const page = parseInt(req.query.page) || 0; // Get the page number from the query, default to 0
+    const pageSize = parseInt(req.query.pageSize) || 25; // Get the page size from the query, default to 25
+    const skip = page * pageSize; // Calculate skip value based on page and pageSize
 
-    // Fetch data from the database based on the filter
-    const data = await sensordata.find(filter).sort({ time: 1 });
+    // Fetch paginated data from the database based on the filter
+    const data = await sensordata
+      .find(filter)
+      .sort({ time: 1 })
+      .skip(skip)
+      .limit(pageSize);
 
-    // Extract data as before and respond with the filtered data
+    // Extract data and respond with the paginated filtered data
     const filteredData = {
       formattedDate: [],
       rpm: [],
@@ -231,7 +237,7 @@ router.get("/getDataByThreshold", async (req, res) => {
     // Check if any of the thresholds are valid
     const validThresholds = Object.keys(thresholds).filter((key) => !isNaN(thresholds[key]));
 
-    // If there are valid thresholds, return data for those fields
+    // If there are valid thresholds, return data for those fields along with pagination info
     if (validThresholds.length > 0) {
       const response = {
         formattedDate: filteredData.formattedDate,
@@ -240,7 +246,14 @@ router.get("/getDataByThreshold", async (req, res) => {
       validThresholds.forEach((field) => {
         response[field] = filteredData[field];
       });
-      console.log(response)
+
+      // Include pagination information in the response
+      response.pagination = {
+        page: page,
+        pageSize: pageSize,
+        totalCount: await sensordata.countDocuments(filter),
+      };
+
       return res.status(200).json(response);
     }
 
@@ -251,7 +264,6 @@ router.get("/getDataByThreshold", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
 
 
 

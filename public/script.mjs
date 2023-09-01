@@ -290,7 +290,7 @@ clearButton.addEventListener('click', async () => {
 });
 
 let currentPage = 0; // Track the current page for pagination
-const pageSize = 20; // Number of data points to display per page
+const pageSize = 25; // Number of data points to display per page
 
 
 
@@ -298,6 +298,7 @@ const pageSize = 20; // Number of data points to display per page
 ///////////threshold play ground ////////
 
 const drawChartButton = document.getElementById('drawChartButton');
+let filter = {};
 drawChartButton.addEventListener('click', () => {
   // Get threshold values from input fields
   const rpmThreshold = parseFloat(document.getElementById('rpmThreshold').value);
@@ -307,7 +308,7 @@ drawChartButton.addEventListener('click', () => {
   const pressureThreshold = parseFloat(document.getElementById('pressureThreshold').value);
   
   // Create a filter object based on the provided threshold values
-  const filter = {};
+
   
   if (!isNaN(rpmThreshold)) {
     filter.rpm = rpmThreshold;
@@ -330,39 +331,21 @@ drawChartButton.addEventListener('click', () => {
   }
   
   fetchData(currentPage, fromEpoch, toDateEpoch, filter)
-  // Make a GET request to fetch data based on the filter
-  // axios.get('/sensors/getDataByThreshold', { params: filter })
-  //   .then((response) => {
-  //     console.log("threshould response     + ++ + + +       ",response)
-  //     // Handle the response and update the chart as needed
-  //     const data = response.data;
-  //     // Extract data arrays as before
-  //     const categories = data.formattedDate;
-  //     const temp1Data = data.temp1;
-  //     const temp2Data = data.temp2;
-  //     const temp3Data = data.temp3;
-  //     const pressureData = data.pressure;
-  //     const rpmData = data.rpm;
-  //     // Update the chart with the filtered data
-  //     chart.xAxis[0].update({ categories }, false);
-  //     chart.series[0].setData(temp1Data, false);
-  //     chart.series[1].setData(temp2Data, false);
-  //     chart.series[2].setData(temp3Data, false);
-  //     chart.series[3].setData(pressureData, false);
-  //     chart.series[4].setData(rpmData, false);
-  //     chart.redraw(false);
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //   });
 });
-
-const fetchData = async (page, fromdate, todate,filter) => {
+const fetchData = async (page, fromdate, todate,filters) => {
   try {
-    console.log(page,fromdate,todate,filter);
+    console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{",page,fromdate,todate,filters);
     let apiEndpoint;
     let params = {};
-    if (fromdate && todate) {
+    if (!fromdate && !todate && Object.keys(filter).length === 0) {
+      // Use the page-based API as the default when no filters or date range provided
+      apiEndpoint = '/sensors/getDatByPage';
+      params = {
+        page: page,
+        pageSize: pageSize,
+      };
+    } else if (fromdate && todate) {
+      // Use the date range-based API
       apiEndpoint = '/sensors/getDataByDateRange';
       params = {
         from: fromdate,
@@ -378,31 +361,26 @@ const fetchData = async (page, fromdate, todate,filter) => {
         page: page,
         pageSize: pageSize,
       };
-    } else {
-      // Use the page-based API as the default
-      apiEndpoint = '/sensors/getDatByPage';
-      params = {
-        page: page,
-        pageSize: pageSize,
-      };
     }
+    
+    
         console.log("api is  > > > >",apiEndpoint+params);
     const result = await axios.get(apiEndpoint, { params });
-    console.log("dattaa >> from      db+++++",result)
+    console.log("dattaa >> from      db+++++",result.data)
     // Check if any of the data arrays are empty
-    if (
-      !result.data.rpm.length ||
-      !result.data.temp1.length ||
-      !result.data.temp2.length ||
-      !result.data.temp3.length ||
-      !result.data.pressure.length ||
-      !result.data.formattedDate.length
-    ){
-      showPopup(); // Show the popup if there's no data
-      return; // Return to avoid further processing
-    } else {
-      hidePopup(); // Hide the popup if there's data
-    }
+    // if (
+    //   !result.data.rpm.length ||
+    //   !result.data.temp1.length ||
+    //   !result.data.temp2.length ||
+    //   !result.data.temp3.length ||
+    //   !result.data.pressure.length ||
+    //   !result.data.formattedDate.length
+    // ){
+    //   showPopup(); // Show the popup if there's no data
+    //   return; // Return to avoid further processing
+    // } else {
+    //   hidePopup(); // Hide the popup if there's data
+    // }
 
     const categories = result.data.formattedDate;
     const temp1Data = result.data.temp1;
@@ -439,13 +417,13 @@ popupClose.addEventListener('click', hidePopup);
 prevButton.addEventListener('click', () => {
   if (currentPage > 0) {
     currentPage -= 1;
-    fetchData(currentPage, fromEpoch, toDateEpoch);
+    fetchData(currentPage, fromEpoch, toDateEpoch,filter);
   }
 });
 
 nextButton.addEventListener('click', () => {
   currentPage += 1;
-  fetchData(currentPage, fromEpoch, toDateEpoch);
+  fetchData(currentPage, fromEpoch, toDateEpoch,filter);
 });
 
 const fetchLiveData = async () => {
@@ -458,7 +436,7 @@ const fetchDataByPage = async (page) => {
 };
 
 
-fetchDataByPage(currentPage);
+
 
 socket.on("dataCleared", () => {
   fetchLiveData();
@@ -467,5 +445,4 @@ socket.on("dataCleared", () => {
 socket.on("dataPosted", () => {
   fetchLiveData();
 })
-
-fetchLiveData()
+fetchDataByPage(currentPage);

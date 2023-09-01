@@ -173,3 +173,60 @@
   .popup-close-button:hover {
     background-color: #217dbb;
   }
+
+
+
+
+
+
+
+
+
+
+/* Create a container for the threshold input fields */
+.threshold-container {
+  display: flex;
+  flex-wrap: wrap; /* Allow input fields to wrap to the next line if needed */
+  justify-content: center; /* Center align the content horizontally */
+  align-items: center; /* Center align the content vertically */
+  margin: 20px;
+  background-color: #f7f7f7; /* Light gray background color */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style labels for input fields */
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  flex: 1; /* Distribute available space evenly among labels */
+}
+
+/* Style input fields for thresholds */
+input[type="number"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  flex: 2; /* Distribute available space evenly among input fields */
+}
+
+/* Style the "Draw Chart" button */
+#drawChartButton {
+  background-color: #27ae60; /* Green background color */
+  color: white; /* Text color */
+  border: none; /* No border */
+  border-radius: 5px;
+  padding: 10px 20px; /* Padding around the text */
+  font-size: 16px; /* Font size */
+  cursor: pointer; /* Show hand cursor on hover */
+  transition: background-color 0.3s; /* Smooth transition for background color change */
+  margin-top: 10px;
+  flex: 2; /* Distribute available space evenly among the button */
+}
+
+/* Hover effect for the "Draw Chart" button */
+#drawChartButton:hover {
+  background-color: #219d53; /* Darker green on hover */
+}
