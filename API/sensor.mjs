@@ -158,6 +158,100 @@ router.get("/getDataByDateRange", async (req, res) => {
 });
 
 
+router.get("/getDataByThreshold", async (req, res) => {
+  try {
+    // Retrieve the values of query parameters, including potential MongoDB query operators
+    const thresholds = {
+      rpm: parseFloat(req.query.rpm),
+      temp1: parseFloat(req.query.temp1),
+      temp2: parseFloat(req.query.temp2),
+      temp3: parseFloat(req.query.temp3),
+      pressure: parseFloat(req.query.pressure),
+    };
+
+
+    console.log("threshold >>>>>>",thresholds)
+
+    // Create a filter object based on the provided threshold values
+    const filter = {};
+
+    // Count the number of provided thresholds
+    const numThresholds = Object.values(thresholds).filter((value) => !isNaN(value)).length;
+    console.log("numThresholds >>>>>>",numThresholds)
+    if (!isNaN(thresholds.rpm)) {
+      filter.rpm = { $gte: thresholds.rpm };
+    }
+
+    if (!isNaN(thresholds.temp1)) {
+      filter.temp1 = { $gte: thresholds.temp1 };
+    }
+
+    if (!isNaN(thresholds.temp2)) {
+      filter.temp2 = { $gte: thresholds.temp2 };
+    }
+
+    if (!isNaN(thresholds.temp3)) {
+      filter.temp3 = { $gte: thresholds.temp3 };
+    }
+
+    if (!isNaN(thresholds.pressure)) {
+      filter.pressure = { $gte: thresholds.pressure };
+    }
+
+    // Fetch data from the database based on the filter
+    let formattedDate = [];
+
+    // Fetch data from the database based on the filter
+    const data = await sensordata.find(filter).sort({ time: 1 });
+
+    // Extract data as before and respond with the filtered data
+    const filteredData = {
+      formattedDate: [],
+      rpm: [],
+      temp1: [],
+      temp2: [],
+      temp3: [],
+      pressure: [],
+    };
+
+    data.forEach((item) => {
+      filteredData.rpm.push(item.rpm);
+      filteredData.temp1.push(item.temp1);
+      filteredData.temp2.push(item.temp2);
+      filteredData.temp3.push(item.temp3);
+      filteredData.pressure.push(item.pressure);
+
+      let epoch = new Date(item.time * 1000);
+      let options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+      };
+      let formatted = epoch.toLocaleString("en-US", options);
+      filteredData.formattedDate.push(formatted);
+    });
+
+    // If only one threshold is provided, return data for that field
+    if (numThresholds === 1) {
+      const fieldName = Object.keys(thresholds).find((field) => !isNaN(thresholds[field]));
+      const singleFieldData = {
+        formattedDate: filteredData.formattedDate,
+        [fieldName]: filteredData[fieldName],
+      };
+      return res.status(200).json(singleFieldData);
+    }
+
+    // If multiple thresholds are provided or none are provided, return all data
+    return res.status(200).json({ rpm: filteredData.rpm });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 
 

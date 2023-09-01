@@ -292,7 +292,74 @@ clearButton.addEventListener('click', async () => {
 let currentPage = 0; // Track the current page for pagination
 const pageSize = 20; // Number of data points to display per page
 
-const fetchData = async (page, fromdate, todate) => {
+
+
+
+///////////threshold play ground ////////
+
+const drawChartButton = document.getElementById('drawChartButton');
+drawChartButton.addEventListener('click', () => {
+  // Get threshold values from input fields
+  const rpmThreshold = parseFloat(document.getElementById('rpmThreshold').value);
+  const temp1Threshold = parseFloat(document.getElementById('temp1Threshold').value);
+  const temp2Threshold = parseFloat(document.getElementById('temp2Threshold').value);
+  const temp3Threshold = parseFloat(document.getElementById('temp3Threshold').value);
+  const pressureThreshold = parseFloat(document.getElementById('pressureThreshold').value);
+  
+  // Create a filter object based on the provided threshold values
+  const filter = {};
+  
+  if (!isNaN(rpmThreshold)) {
+    filter.rpm = rpmThreshold;
+  }
+  
+  if (!isNaN(temp1Threshold)) {
+    filter.temp1 = temp1Threshold;
+  }
+  
+  if (!isNaN(temp2Threshold)) {
+    filter.temp2 = temp2Threshold;
+  }
+  
+  if (!isNaN(temp3Threshold)) {
+    filter.temp3 = temp3Threshold;
+  }
+  
+  if (!isNaN(pressureThreshold)) {
+    filter.pressure = pressureThreshold;
+  }
+  
+
+  // Make a GET request to fetch data based on the filter
+  axios.get('/sensors/getDataByThreshold', { params: filter })
+    .then((response) => {
+      console.log("threshould response     + ++ + + +       ",response)
+      // Handle the response and update the chart as needed
+      const data = response.data;
+      // Extract data arrays as before
+      const categories = data.formattedDate;
+      const temp1Data = data.temp1;
+      const temp2Data = data.temp2;
+      const temp3Data = data.temp3;
+      const pressureData = data.pressure;
+      const rpmData = data.rpm;
+
+      // Update the chart with the filtered data
+      chart.xAxis[0].update({ categories }, false);
+      chart.series[0].setData(temp1Data, false);
+      chart.series[1].setData(temp2Data, false);
+      chart.series[2].setData(temp3Data, false);
+      chart.series[3].setData(pressureData, false);
+      chart.series[4].setData(rpmData, false);
+
+      chart.redraw(false);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
+const fetchData = async (page, fromdate, todate,thresholds) => {
   try {
     let apiEndpoint;
     let params = {};
