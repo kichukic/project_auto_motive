@@ -297,7 +297,7 @@ const pageSize = 25; // Number of data points to display per page
 
 ///////////threshold play ground ////////
 
-const drawChartButton = document.getElementById('drawChartButton');
+const drawChartButton = document.getElementById('drawChartButtons');
 let filter = {};
 drawChartButton.addEventListener('click', () => {
   // Get threshold values from input fields
