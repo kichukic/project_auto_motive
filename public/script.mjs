@@ -426,6 +426,15 @@ nextButton.addEventListener('click', () => {
   fetchData(currentPage, fromEpoch, toDateEpoch,filter);
 });
 
+
+// Add an event listener to the "Home" button to reload the page
+const homeButton = document.getElementById('homeButton');
+
+homeButton.addEventListener('click', () => {
+  // Reload the page
+  window.location.reload();
+});
+
 const fetchLiveData = async () => {
 
   fetchData(currentPage, fromEpoch, toDateEpoch);
