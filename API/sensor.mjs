@@ -169,15 +169,9 @@ router.get("/getDataByThreshold", async (req, res) => {
       pressure: parseFloat(req.query.pressure),
     };
 
-
-    console.log("threshold >>>>>>",thresholds)
-
     // Create a filter object based on the provided threshold values
     const filter = {};
 
-    // Count the number of provided thresholds
-    const numThresholds = Object.values(thresholds).filter((value) => !isNaN(value)).length;
-    console.log("numThresholds >>>>>>",numThresholds)
     if (!isNaN(thresholds.rpm)) {
       filter.rpm = { $gte: thresholds.rpm };
     }
@@ -234,18 +228,24 @@ router.get("/getDataByThreshold", async (req, res) => {
       filteredData.formattedDate.push(formatted);
     });
 
-    // If only one threshold is provided, return data for that field
-    if (numThresholds === 1) {
-      const fieldName = Object.keys(thresholds).find((field) => !isNaN(thresholds[field]));
-      const singleFieldData = {
+    // Check if any of the thresholds are valid
+    const validThresholds = Object.keys(thresholds).filter((key) => !isNaN(thresholds[key]));
+
+    // If there are valid thresholds, return data for those fields
+    if (validThresholds.length > 0) {
+      const response = {
         formattedDate: filteredData.formattedDate,
-        [fieldName]: filteredData[fieldName],
       };
-      return res.status(200).json(singleFieldData);
+
+      validThresholds.forEach((field) => {
+        response[field] = filteredData[field];
+      });
+
+      return res.status(200).json(response);
     }
 
-    // If multiple thresholds are provided or none are provided, return all data
-    return res.status(200).json({ rpm: filteredData.rpm });
+    // If no valid thresholds are provided, return an empty response
+    return res.status(200).json({});
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
