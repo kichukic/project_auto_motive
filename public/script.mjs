@@ -374,6 +374,7 @@ nextButton.addEventListener('click', () => {
 });
 
 const fetchLiveData = async () => {
+
   fetchData(currentPage, fromEpoch, toDateEpoch);
 };
 
