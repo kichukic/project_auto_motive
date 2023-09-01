@@ -329,38 +329,37 @@ drawChartButton.addEventListener('click', () => {
     filter.pressure = pressureThreshold;
   }
   
-
+  fetchData(currentPage, fromEpoch, toDateEpoch, filter)
   // Make a GET request to fetch data based on the filter
-  axios.get('/sensors/getDataByThreshold', { params: filter })
-    .then((response) => {
-      console.log("threshould response     + ++ + + +       ",response)
-      // Handle the response and update the chart as needed
-      const data = response.data;
-      // Extract data arrays as before
-      const categories = data.formattedDate;
-      const temp1Data = data.temp1;
-      const temp2Data = data.temp2;
-      const temp3Data = data.temp3;
-      const pressureData = data.pressure;
-      const rpmData = data.rpm;
-
-      // Update the chart with the filtered data
-      chart.xAxis[0].update({ categories }, false);
-      chart.series[0].setData(temp1Data, false);
-      chart.series[1].setData(temp2Data, false);
-      chart.series[2].setData(temp3Data, false);
-      chart.series[3].setData(pressureData, false);
-      chart.series[4].setData(rpmData, false);
-
-      chart.redraw(false);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  // axios.get('/sensors/getDataByThreshold', { params: filter })
+  //   .then((response) => {
+  //     console.log("threshould response     + ++ + + +       ",response)
+  //     // Handle the response and update the chart as needed
+  //     const data = response.data;
+  //     // Extract data arrays as before
+  //     const categories = data.formattedDate;
+  //     const temp1Data = data.temp1;
+  //     const temp2Data = data.temp2;
+  //     const temp3Data = data.temp3;
+  //     const pressureData = data.pressure;
+  //     const rpmData = data.rpm;
+  //     // Update the chart with the filtered data
+  //     chart.xAxis[0].update({ categories }, false);
+  //     chart.series[0].setData(temp1Data, false);
+  //     chart.series[1].setData(temp2Data, false);
+  //     chart.series[2].setData(temp3Data, false);
+  //     chart.series[3].setData(pressureData, false);
+  //     chart.series[4].setData(rpmData, false);
+  //     chart.redraw(false);
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //   });
 });
 
-const fetchData = async (page, fromdate, todate,thresholds) => {
+const fetchData = async (page, fromdate, todate,filter) => {
   try {
+    console.log(page,fromdate,todate,filter);
     let apiEndpoint;
     let params = {};
     if (fromdate && todate) {
@@ -371,16 +370,25 @@ const fetchData = async (page, fromdate, todate,thresholds) => {
         page: page,
         pageSize: pageSize,
       };
+    } else if (filter) {
+      // Use the threshold API when thresholds are provided
+      apiEndpoint = '/sensors/getDataByThreshold';
+      params = {
+        filter: filter,
+        page: page,
+        pageSize: pageSize,
+      };
     } else {
+      // Use the page-based API as the default
       apiEndpoint = '/sensors/getDatByPage';
       params = {
         page: page,
         pageSize: pageSize,
       };
     }
-
+        console.log("api is  > > > >",apiEndpoint+params);
     const result = await axios.get(apiEndpoint, { params });
-
+    console.log("dattaa >> from      db+++++",result)
     // Check if any of the data arrays are empty
     if (
       !result.data.rpm.length ||

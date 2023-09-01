@@ -168,7 +168,7 @@ router.get("/getDataByThreshold", async (req, res) => {
       temp3: parseFloat(req.query.temp3),
       pressure: parseFloat(req.query.pressure),
     };
-
+    console.log(req.query.rpm,req.query.temp1,req.query.temp2,req.query.temp3,req.query.pressure)
     // Create a filter object based on the provided threshold values
     const filter = {};
 
@@ -240,7 +240,7 @@ router.get("/getDataByThreshold", async (req, res) => {
       validThresholds.forEach((field) => {
         response[field] = filteredData[field];
       });
-
+      console.log(response)
       return res.status(200).json(response);
     }
 
