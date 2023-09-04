@@ -127,7 +127,7 @@ router.get("/getDataByDateRange", async (req, res) => {
     let pressure = []
     let formattedDate = []
     const page = parseInt(req.query.page) || 0; // Get the page number from the query, default to 0
-    const pageSize = parseInt(req.query.pageSize) || 50; // Get the page size from the query, default to 20
+    const pageSize = parseInt(req.query.pageSize) || 25; // Get the page size from the query, default to 20
     const skip = page * pageSize;
        const fromDate = req.query.from // Convert string to Date object
        const toDate = req.query.to; // Convert string to Date object
@@ -135,7 +135,7 @@ router.get("/getDataByDateRange", async (req, res) => {
       // Fetch data from the database within the specified date range
       const data = await sensordata.find({
           time: { $gte: fromDate, $lte: toDate }
-      }).sort({ time: 1 }).skip(skip).limit(pageSize).then((data)=>{
+      }).sort({ time: -1 }).skip(skip).limit(pageSize).then((data)=>{
         console.log(" + + ++  +",)
         data.map((item)=>{
           rpm.push(item.rpm)
@@ -200,7 +200,7 @@ router.get("/getDataByThreshold", async (req, res) => {
     // Fetch paginated data from the database based on the filter
     const data = await sensordata
       .find(filter)
-      .sort({ time: 1 })
+      .sort({ time: -1 })
       .skip(skip)
       .limit(pageSize);
 
@@ -253,7 +253,7 @@ router.get("/getDataByThreshold", async (req, res) => {
         pageSize: pageSize,
         totalCount: await sensordata.countDocuments(filter),
       };
-
+      console.log("data and received object  >> >> >. ",response);
       return res.status(200).json(response);
     }
 

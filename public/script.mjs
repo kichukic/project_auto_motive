@@ -274,6 +274,21 @@ const chart = Highcharts.chart('chart-container', options);
 const prevButton = document.getElementById('prevButton');
 const nextButton = document.getElementById('nextButton');
 const clearButton = document.getElementById('clearButton');
+const noDataPopup = document.getElementById('noDataPopup');
+const popupCloseButton = document.getElementById('popupClose');
+
+// Function to show the popup
+// Function to show the popup
+const showNoDataPopup = () => {
+  noDataPopup.style.display = 'block';
+};
+
+// Function to hide the popup
+const hideNoDataPopup = () => {
+  noDataPopup.style.display = 'none';
+};
+
+
 
 clearButton.addEventListener('click', async () => {
   try {
@@ -367,20 +382,6 @@ const fetchData = async (page, fromdate, todate,filters) => {
         console.log("api is  > > > >",apiEndpoint+params);
     const result = await axios.get(apiEndpoint, { params });
     console.log("dattaa >> from      db+++++",result.data)
-    // Check if any of the data arrays are empty
-    // if (
-    //   !result.data.rpm.length ||
-    //   !result.data.temp1.length ||
-    //   !result.data.temp2.length ||
-    //   !result.data.temp3.length ||
-    //   !result.data.pressure.length ||
-    //   !result.data.formattedDate.length
-    // ){
-    //   showPopup(); // Show the popup if there's no data
-    //   return; // Return to avoid further processing
-    // } else {
-    //   hidePopup(); // Hide the popup if there's data
-    // }
 
     const categories = result.data.formattedDate;
     const temp1Data = result.data.temp1;
@@ -402,22 +403,31 @@ const fetchData = async (page, fromdate, todate,filters) => {
     console.log(error);
   }
 };
-function showPopup() {
-  popupOverlay.style.display = 'flex';
-}
 
-// Hide popup
-function hidePopup() {
-  popupOverlay.style.display = 'none';
-}
 
-// Close popup when close button is clicked
-popupClose.addEventListener('click', hidePopup);
-
-prevButton.addEventListener('click', () => {
+prevButton.addEventListener('click',async () => {
   if (currentPage > 0) {
+    console.log("call received still on the data part to the prev button")
     currentPage -= 1;
     fetchData(currentPage, fromEpoch, toDateEpoch,filter);
+  }else{
+    console.log("call received to the else part of prev button")
+    try {
+      const result = await axios.get('/sensors/getDataByPage', {
+        params: {
+          page: currentPage,
+          pageSize: pageSize,
+        },
+      });
+      const data = result.data;
+
+      if (data.formattedDate.length === 0) {
+        // Show the "No more data available" popup
+        showNoDataPopup();
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 });
 
@@ -426,6 +436,10 @@ nextButton.addEventListener('click', () => {
   fetchData(currentPage, fromEpoch, toDateEpoch,filter);
 });
 
+popupCloseButton.addEventListener('click', () => {
+  // Hide the popup when the close button is clicked
+  hideNoDataPopup();
+});
 
 // Add an event listener to the "Home" button to reload the page
 const homeButton = document.getElementById('homeButton');
