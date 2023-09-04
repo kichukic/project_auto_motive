@@ -49,13 +49,12 @@
   }
 
   .fire-text {
-    font-size: 3em;
-    text-transform: uppercase;
-    color: transparent;
-    background: linear-gradient(to bottom, rgb(1, 1, 1) , black);
-    background-clip: text;
-    animation: flicker 60s infinite;
+    font-size: 2.0em;
+    color: #0F3376;
+    font-weight: bold;
   }
+  
+
 
 
 
